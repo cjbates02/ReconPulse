@@ -7,7 +7,7 @@ class DetectionEngine:
     
 
     def detect_new_endpoint(self, packet):
-        if packet.haslayer(ARP): # it is an arp response not a request
+        if packet.haslayer(ARP):
             mac = packet.hwsrc
             ip = packet.psrc
             
