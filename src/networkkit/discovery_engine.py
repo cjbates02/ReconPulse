@@ -1,6 +1,8 @@
-# nmap -sn 10.0.97.0/24
+from util import get_logger
 import subprocess
 import re
+
+logger = get_logger(__name__)
 
 class DiscoveryEngine:
     def __init__(self, network):
@@ -12,9 +14,9 @@ class DiscoveryEngine:
         try:
             output = subprocess.check_output(['nmap', '-sn', self.network], text=True)
             ip_addresses = self.parse_ip_addresses(output)
-            print(ip_addresses)
+            logger.info(f"Successfully discovered the following ip addresses: {ip_addresses}")
         except subprocess.CalledProcessError as e:
-            print(f"Failed to execute 'nmap -sn' scan on {network}. Exit code: {e.returncode}")
+            logger.error(f"Failed to execute 'nmap -sn' scan on {network}. Exit code: {e.returncode}")
     
     
     def parse_ip_addresses(self, output):
