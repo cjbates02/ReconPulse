@@ -1,4 +1,7 @@
 from scapy.all import ARP, sniff
+from util import get_logger
+
+logger = get_logger(__name__)
 
 class DetectionEngine:
     def __init__(self, network):
@@ -12,17 +15,16 @@ class DetectionEngine:
             ip = packet.psrc
             
             if ip not in self.known_endpoints:
-                print(f'New device detected: {ip}, {mac}')
+                logger.info(f'New device detected: {ip}, {mac}')
                 self.known_endpoints.add(ip)
     
     
     def run(self):
-        print('Starting discovery engine.')
+        logger.info('Starting discovery engine.')
         sniff(filter="arp", prn=self.detect_new_endpoint, store=0)
 
 
 if __name__ == '__main__':
-    # sudo $(which python) discovery.py
     detection_engine = DetectionEngine('10.0.97.0/24')
     detection_engine.run()
     

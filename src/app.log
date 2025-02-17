@@ -1,0 +1,5 @@
+2025-02-17 23:21:39,604 - networkkit.detection_engine - INFO - Starting discovery engine.
+2025-02-17 23:23:36,103 - networkkit.detection_engine - INFO - Starting discovery engine.
+2025-02-17 23:23:36,735 - networkkit.detection_engine - INFO - New device detected: 10.0.97.1, e4:3a:6e:19:cf:83
+2025-02-17 23:23:37,074 - networkkit.detection_engine - INFO - New device detected: 10.0.97.143, a4:ba:db:18:cc:b6
+2025-02-17 23:23:45,903 - networkkit.detection_engine - INFO - New device detected: 10.0.97.212, b8:27:eb:02:07:d1

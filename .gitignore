@@ -1,2 +1,4 @@
 src/venv
 src/server/venv
+venv
+*__pycache__
