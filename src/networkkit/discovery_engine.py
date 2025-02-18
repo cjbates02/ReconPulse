@@ -1,6 +1,7 @@
 from util import get_logger
 import subprocess
 import re
+import time
 
 logger = get_logger(__name__)
 
@@ -8,6 +9,7 @@ class DiscoveryEngine:
     def __init__(self, network):
         self.network = network
         self.new_endpoints = set()
+        self.sleep_interval = 15
         
     
     def discover_endpoints(self):
@@ -23,6 +25,13 @@ class DiscoveryEngine:
         ip_pattern = r'\b(?:\d{1,3}\.){3}\d{1,3}\b'
         matches = re.findall(ip_pattern, output)
         return matches
+    
+    
+    def run(self):
+        logger.info('Starting discovery engine.')
+        while True:
+            self.discover_endpoints()
+            time.sleep(self.sleep_interval)
 
 
 if __name__ == '__main__':

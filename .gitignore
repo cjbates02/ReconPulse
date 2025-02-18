@@ -2,3 +2,4 @@ src/venv
 src/server/venv
 venv
 *__pycache__
+src/app.log
