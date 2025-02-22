@@ -6,5 +6,5 @@ if __name__ == '__main__':
     # detection_engine = DetectionEngine('10.0.97.0/24')
     # detection_engine.run()
     
-    discovery_engine = DiscoveryEngine(['10.0.97.0/24'])
+    discovery_engine = DiscoveryEngine(['10.0.98.0/24'])
     discovery_engine.run()

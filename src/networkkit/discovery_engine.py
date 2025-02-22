@@ -24,7 +24,7 @@ class DiscoveryEngine:
             for network in self.networks:
                 output = subprocess.check_output(['nmap', '-sn', '-PR', network], text=True)
                 ips = self.parse_ip_addresses(output)
-                self.data = {ip: {'mac': None, 'hostname': None, 'vendor': None} for ip in ips}
+                self.data = {ip: {'mac': None, 'hostname': None, 'vendor': None, 'gateway': None} for ip in ips}
                 logger.info(f"Successfully discovered the following ip addresses on network {network}: {ips}")
         except subprocess.CalledProcessError as e:
             logger.error(f"Failed to execute 'nmap -sn' scan on {self.networks}. Exit code: {e.returncode}")
@@ -35,6 +35,7 @@ class DiscoveryEngine:
             for ip in self.data:
                 output = subprocess.check_output(['arp', '-a', ip], text=True)
                 mac = self.parse_mac_address(output)
+                
                 self.data[ip]['mac'] = mac
                 logger.info(f"Successfully discovered mac address {mac} for ip address {ip}.")
         except subprocess.CalledProcessError as e:
@@ -86,11 +87,32 @@ class DiscoveryEngine:
         return mac
     
     
+    def get_host_gateway(self):
+        try:
+            output = subprocess.check_output(['ip', 'route'], text=True)
+            gateway = re.search(r'default via \b(?:\d{1,3}\.){3}\d{1,3}\b', output).group().split()[-1].strip()
+            logger.info(f"Successfully discovered host gateway: {gateway}.")
+        except subprocess.CalledProcessError as e:
+            logger.error(f"Failed to execute 'ip route' command. Exit code: {e.returncode}.")
+            gateway = None
+        return gateway
+    
+    
+    def set_host_gateway(self):
+        gateway = self.get_host_gateway()
+        if gateway:
+            subnet = '.'.join(gateway.split('.')[0:3])
+            for ip in self.data:
+                if subnet in ip:
+                    self.data[ip]['hostname'] = gateway
+    
+    
     def run(self):
         logger.info('Starting discovery engine.')
         while True:
             self.discover_layer2_endpoints()
             self.set_mac_addresses()
             self.set_vendors()
+            self.set_host_gateway()
             pprint(self.data)
             time.sleep(self.sleep_interval)
