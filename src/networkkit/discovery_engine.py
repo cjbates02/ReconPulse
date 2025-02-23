@@ -15,7 +15,7 @@ class DiscoveryEngine:
         self.network_scanner = NetworkScanner(networks)
         self.oui_lookup = OUILookup()
         self.sleep_interval = sleep_interval
-        self.data = {ip: {} for ip in self.network_scanner.get_ips()}
+        self.data = {ip: {'mac': None, 'vendor': None, 'gateway': None} for ip in self.network_scanner.get_ips()}
     
     
     def set_mac_addresses(self):
@@ -31,8 +31,6 @@ class DiscoveryEngine:
                 oui = self.oui_lookup.parse_oui_from_mac(mac)
                 vendor = self.oui_lookup.lookup_vendor(oui)
                 self.data[ip]['vendor'] = vendor
-            else:
-                self.data[ip]['vendor'] = None
     
     
     def set_host_gateway(self):
