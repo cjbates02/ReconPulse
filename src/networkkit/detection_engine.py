@@ -21,7 +21,7 @@ class DetectionEngine:
     
     def run(self):
         logger.info('Starting discovery engine.')
-        sniff(filter="arp", prn=self.detect_new_endpoint, store=0)
+        sniff(filter='arp', prn=self.detect_new_endpoint, store=0)
 
 
 if __name__ == '__main__':

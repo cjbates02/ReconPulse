@@ -1,7 +1,0 @@
-2025-02-17 23:21:39,604 - networkkit.detection_engine - INFO - Starting discovery engine.
-2025-02-17 23:23:36,103 - networkkit.detection_engine - INFO - Starting discovery engine.
-2025-02-17 23:23:36,735 - networkkit.detection_engine - INFO - New device detected: 10.0.97.1, e4:3a:6e:19:cf:83
-2025-02-17 23:23:37,074 - networkkit.detection_engine - INFO - New device detected: 10.0.97.143, a4:ba:db:18:cc:b6
-2025-02-17 23:23:45,903 - networkkit.detection_engine - INFO - New device detected: 10.0.97.212, b8:27:eb:02:07:d1
-2025-02-17 23:29:51,303 - networkkit.discovery_engine - INFO - ['10.0.97.1', '10.0.97.51', '10.0.97.53', '10.0.97.65', '10.0.97.101', '10.0.97.134', '10.0.97.135', '10.0.97.137', '10.0.97.138', '10.0.97.141', '10.0.97.143', '10.0.97.210', '10.0.97.211', '10.0.97.212']
-2025-02-17 23:31:00,207 - networkkit.discovery_engine - INFO - Successfully discovered the following ip addresses: ['10.0.97.1', '10.0.97.51', '10.0.97.53', '10.0.97.65', '10.0.97.101', '10.0.97.134', '10.0.97.135', '10.0.97.137', '10.0.97.138', '10.0.97.141', '10.0.97.143', '10.0.97.210', '10.0.97.211', '10.0.97.212']

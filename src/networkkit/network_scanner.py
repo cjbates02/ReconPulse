@@ -1,25 +1,21 @@
-from util import get_logger
+from util import get_logger, execute_subprocess_command
 import subprocess
 import re
 
 logger = get_logger(__name__)
 
 class NetworkScanner:
-    def __init__(self, networks):
-        self.networks = networks
-    
+    def __init__(self, network):
+        self.network = network
+
     
     def get_ips(self):
-        try:
-            for network in self.networks:
-                output = subprocess.check_output(['nmap', '-sn', '-PR', network], text=True)
-                ips = self._parse_ip_addresses(output)
-                logger.info(f"Successfully discovered the following ip addresses on network {network}: {ips}")
-            return ips
-        except subprocess.CalledProcessError as e:
-            logger.error(f"Failed to execute 'nmap -sn' scan on {self.networks}. Exit code: {e.returncode}")
-            return []
-    
+        output = execute_subprocess_command(f'nmap -sn -PR {self.network}')
+        ips = self._parse_ip_addresses(output)
+        if not ips:
+            logger.error(f'Failed to discover any ips on network {network}')
+        return ips
+        
     
     def _parse_ip_addresses(self, output):
         ip_pattern = r'\b(?:\d{1,3}\.){3}\d{1,3}\b'
@@ -28,30 +24,32 @@ class NetworkScanner:
     
     
     def get_mac_address(self, ip):
-        try:
-            output = subprocess.check_output(['arp', '-a', ip], text=True)
-            mac = self._parse_mac_address(output)
-            logger.info(f"Successfully discovered mac address {mac} for ip address {ip}.")
-            return mac
-        except subprocess.CalledProcessError as e:
-            logger.error(f"Failed to execute 'arp -a' scan on {self.networks}. Exit code: {e.returncode}.")
-    
+        output = execute_subprocess_command(f'arp -a {ip}')
+        mac = self._parse_mac_address(output)
+        if not mac:
+            logger.error(f'Failed to find mac address for ip {ip}.')
+        return mac
+
     
     def _parse_mac_address(self, output):
-        mac_pattern = r'(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}'
-        match = re.search(mac_pattern, output)
+        match = re.search(r'(?:[0-9A-Fa-f]{2}[:-]){5}[0-9A-Fa-f]{2}', output)
         mac = match.group() if match else None
         return mac
             
 
-    def get_host_gateway(self):
-        try:
-            output = subprocess.check_output(['ip', 'route'], text=True)
-            gateway = re.search(r'default via \b(?:\d{1,3}\.){3}\d{1,3}\b', output).group().split()[-1].strip()
-            logger.info(f"Successfully discovered host gateway: {gateway}.")
-        except subprocess.CalledProcessError as e:
-            logger.error(f"Failed to execute 'ip route' command. Exit code: {e.returncode}.")
-            gateway = None
+    def get_gateway(self):
+        output = execute_subprocess_command('ip route')
+        gateway = self._parse_gateway(output)
+        if not gateway:
+            logger.error(f'Failed to find host gateway.')
         return gateway
+    
+    
+    def _parse_gateway(self, output):
+        match = re.search(r'default via \b(?:\d{1,3}\.){3}\d{1,3}\b', output)
+        gateway = match.group().split()[-1].strip() if match else None
+        return gateway
+        
+        
     
     

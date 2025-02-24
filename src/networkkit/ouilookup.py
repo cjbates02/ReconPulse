@@ -16,14 +16,13 @@ class OUILookup:
         if response.status_code == 200:
             logger.info('Successfully fetched oui data.')
             return response.text
-        logger.error('Failed to fetch oui data. Response code: ', response.status_code)
+        logger.error(f'Failed to fetch oui data. Response code: {response.status_code}')
         return None
     
 
     def lookup_vendor(self, oui):
         if oui and oui in self.oui_cache:
             vendor = re.search(f'{oui}.*', self.oui_cache).group().split('\t')[2].strip()
-            logger.info(f'Vendor found in oui cache: {vendor}.')
             return vendor
         logger.error(f'OUI not found in oui cache: {oui}.')
         return None
