@@ -12,6 +12,8 @@
 
 - Need to test hostname discovery
 
+- Refactor method views
+- Move worker and control stuff into seperate folders
 
 
 

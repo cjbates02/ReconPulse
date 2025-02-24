@@ -2,26 +2,37 @@ from flask import jsonify, request
 from flask.views import MethodView
 from networkkit import NetworkScanner
 
-class NetworkAPI(MethodView):
+class IPListAPI(MethodView):
     def __init__(self, network):
         self.scanner = NetworkScanner(network)
-    
-    
+
     def get(self):
-        action = ip = request.args.get('action')
-        if not action:
-            return jsonify({'error': 'Missing action.'}), 400
-        
-        if action == 'ips':
-            return jsonify(self.scanner.get_ips())
-        
-        if action == 'mac':
-            ip = request.args.get('ip')
-            if not ip:
-                return jsonify({'error': 'Missing IP address.'}), 400
-            return jsonify(self.scanner.get_mac_address(ip))
-        
-        if action == 'gateway':
-            return jsonify(self.scanner.get_gateway())
-   
-        return jsonify({'error': 'Invalid action.'}), 400
+        ips = self.scanner.get_ips()
+        if ips:
+            return jsonify(ips), 200
+        return 'Could not retrieve IP list.', 201
+
+
+class MACAddressAPI(MethodView):
+    def __init__(self, network):
+        self.scanner = NetworkScanner(network)
+
+    def get(self):
+        ip = request.args.get('ip')
+        if not ip:
+            return jsonify('Missing IP address.'), 400
+        mac = self.scanner.get_mac_address(ip)
+        if mac:
+            return jsonify(mac), 200
+        return f'MAC Address not found for ip {ip}', 201
+
+
+class GatewayAPI(MethodView):
+    def __init__(self, network):
+        self.scanner = NetworkScanner(network)
+
+    def get(self):
+        gateway = self.scanner.get_gateway()
+        if gateway:
+            return jsonify(gateway), 200
+        return 'Gateway not found.', 201

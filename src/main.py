@@ -1,5 +1,7 @@
 from networkkit import DiscoveryEngine, DetectionEngine
 
+""" WILL RUN ON CONTROLLER NODE """
+
 if __name__ == '__main__':
     # sudo $(which python) app.py
     
