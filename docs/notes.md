@@ -10,6 +10,8 @@
     - Either via API calls or SSH.
     - API endpoint calls are the better way for scalability and less overhead. Just more work lol.
 
+- Need to test hostname discovery
+
 
 
 
