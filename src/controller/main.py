@@ -1,4 +1,5 @@
-from networkkit import DiscoveryEngine, DetectionEngine
+from discoverykit import DiscoveryEngine, OUILookup
+from models import Scanner
 
 """ WILL RUN ON CONTROLLER NODE """
 
@@ -7,6 +8,6 @@ if __name__ == '__main__':
     
     # detection_engine = DetectionEngine('10.0.97.0/24')
     # detection_engine.run()
-    
-    discovery_engine = DiscoveryEngine(['10.0.97.0/24'])
+    scanner = Scanner(address='10.0.97.212:5000', network='10.0.97.0/24')
+    discovery_engine = DiscoveryEngine([scanner])
     discovery_engine.run()

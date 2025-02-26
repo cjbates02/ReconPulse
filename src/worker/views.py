@@ -20,7 +20,7 @@ class MACAddressAPI(MethodView):
     def get(self):
         ip = request.args.get('ip')
         if not ip:
-            return jsonify('Missing IP address.'), 400
+            return 'Missing IP address.', 400
         mac = self.scanner.get_mac_address(ip)
         if mac:
             return jsonify(mac), 200
