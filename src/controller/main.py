@@ -8,6 +8,6 @@ if __name__ == '__main__':
     
     # detection_engine = DetectionEngine('10.0.97.0/24')
     # detection_engine.run()
-    scanner = Scanner(address='10.0.97.212:5000', network='10.0.97.0/24')
+    scanner = Scanner(address='0.0.0.0:80', network='10.0.97.0/24')
     discovery_engine = DiscoveryEngine([scanner])
     discovery_engine.run()
