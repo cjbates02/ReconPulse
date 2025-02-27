@@ -28,6 +28,7 @@ class NetworkScanner:
         mac = self._parse_mac_address(output)
         if not mac:
             logger.error(f'Failed to find mac address for ip {ip}.')
+            return None
         return mac
 
     
