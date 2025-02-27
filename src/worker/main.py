@@ -12,7 +12,7 @@ def create_api(network):
     
     return api
 
-api = create_api('10.0.97/24')
+api = create_api('10.0.97.0/24')
 
 if __name__ == '__main__':
     api.run(debug=True, host='0.0.0.0')

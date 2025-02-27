@@ -53,7 +53,7 @@ class DiscoveryEngine:
                 if not mac:
                     logger.error(f'Cannot set vendor for ip {ip} because no mac address was found.')
                     self.network_to_output[scanner.network][ip]['vendor'] = None
-                    return
+                    continue
                 oui = self.oui_lookup.parse_oui_from_mac(mac)
                 vendor = self.oui_lookup.lookup_vendor(oui)
                 self.network_to_output[scanner.network][ip]['vendor'] = vendor
@@ -71,9 +71,9 @@ class DiscoveryEngine:
         for scanner in self.scanners:
             logger.info(f'Discovered these endpoints on network {scanner.network}:')
             for ip in self.network_to_output[scanner.network]:
-                mac = self.network_to_output[scanner.network][ip]['mac']
-                vendor = self.network_to_output[scanner.network][ip]['vendor']
-                gateway = self.network_to_output[scanner.network][ip]['gateway']
+                mac = self.network_to_output[scanner.network][ip].get('mac')
+                vendor = self.network_to_output[scanner.network][ip].get('vendor')
+                gateway = self.network_to_output[scanner.network][ip].get('gateway')
                 logger.info(f'IP: {ip}, MAC: {mac}, Vendor: {vendor}, Gateway: {gateway}')
     
     
