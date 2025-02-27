@@ -13,7 +13,7 @@ class NetworkScanner:
         output = execute_subprocess_command(f'nmap -sn -PR {self.network}')
         ips = self._parse_ip_addresses(output)
         if not ips:
-            logger.error(f'Failed to discover any ips on network {network}')
+            logger.error(f'Failed to discover any ips on network {self.network}')
         return ips
         
     
