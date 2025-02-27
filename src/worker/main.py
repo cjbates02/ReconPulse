@@ -15,5 +15,4 @@ def create_api(network):
 api = create_api('10.0.97/24')
 
 if __name__ == '__main__':
-    api = create_api()
     api.run(debug=True, host='0.0.0.0')
