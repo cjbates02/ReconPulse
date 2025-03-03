@@ -4,3 +4,4 @@ Dependencies
 - traceroute
 - arp-scan
 - bind9-host
+- net-tools

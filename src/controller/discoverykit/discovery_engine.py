@@ -21,14 +21,18 @@ class DiscoveryEngine:
     
     
     def send_scanner_request(self, scanner, value, request_arg=None):
-        if request_arg:
-            response = requests.get(f"http://{scanner.address}/scan/{value}?{request_arg['name']}={request_arg['value']}")
-        else:
-            response = requests.get(f'http://{scanner.address}/scan/{value}')
+        try:
+            if request_arg:
+                response = requests.get(f"http://{scanner.address}/scan/{value}?{request_arg['name']}={request_arg['value']}")
+            else:
+                response = requests.get(f'http://{scanner.address}/scan/{value}')
+        except requests.exceptions.ConnectionError as e:
+            logger.error(f'Could not connect to worker node {scanner.address}.')
+            return []
             
         if not response:
             logger.error(f'Failed to send {value} request to scanner {scanner.address}.')
-            return None
+            return []
         
         if response.status_code == 200:
             return response.json()
