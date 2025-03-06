@@ -18,7 +18,8 @@ for HOST in "${HOSTS[@]}"; do
     ssh "$USERNAME@$HOST" <<EOF
         sudo docker pull cjbates02/recon_worker
         sudo docker stop recon_worker
-        sudo -E docker run --rm -e NETWORK=$HOST/24 -d --network=host --name recon_worker cjbates02/recon_worker
+        sudo docker rm recon_worker
+        sudo -E docker run --rm --privileged -e NETWORK="${HOST%.*}.0"/24 -d --network=host --name recon_worker cjbates02/recon_worker
 EOF
 done
 
