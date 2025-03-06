@@ -3,3 +3,4 @@ src/server/venv
 venv
 *__pycache__
 src/app.log
+src/worker/.env
