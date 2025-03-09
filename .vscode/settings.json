@@ -1,3 +1,6 @@
 {
-    "explorer.sortOrder": "type"  // Sorts files by type
+    "explorer.sortOrder": "type",  // Sorts files by type
+    "files.exclude": {
+        "**/__pycache__/": true
+    }
 }
