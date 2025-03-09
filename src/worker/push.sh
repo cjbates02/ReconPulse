@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Build and push the recon worker image
-# sudo docker build --no-cache -t cjbates02/recon_worker .
-# sudo docker login --username=cjbates02
-# sudo docker push cjbates02/recon_worker
+sudo docker build --no-cache -t cjbates02/recon_worker .
+sudo docker login --username=cjbates02
+sudo docker push cjbates02/recon_worker
 # sudo docker run -t --network=host cjbates02/recon_worker
 
 # SSH into the worker nodes and pull down and start the updated image

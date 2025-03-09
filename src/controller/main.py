@@ -1,4 +1,4 @@
-from discoverykit import DiscoveryEngine, OUILookup
+from discoverykit import DiscoveryEngine
 from models import Scanner
 
 """ WILL RUN ON CONTROLLER NODE """

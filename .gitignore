@@ -4,3 +4,4 @@ venv
 *__pycache__
 src/app.log
 src/worker/.env
+src/controller/network.db
