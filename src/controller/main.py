@@ -1,5 +1,6 @@
 from discoverykit import DiscoveryEngine
 from models import Scanner
+import time
 
 """ WILL RUN ON CONTROLLER NODE """
 
@@ -12,4 +13,6 @@ if __name__ == '__main__':
     scanner2 = Scanner(address='10.0.99.212:80', network='10.0.99.0/24')
     
     discovery_engine = DiscoveryEngine([scanner1, scanner2])
-    discovery_engine.run()
+    while True:
+        print(discovery_engine.get_latest_poll_time())
+        time.sleep(15)

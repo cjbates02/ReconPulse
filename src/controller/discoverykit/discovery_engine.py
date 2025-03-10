@@ -1,23 +1,28 @@
-from util import get_logger
+from util import get_logger, get_current_utc_time
 from .ouilookup import OUILookup
 from databasekit import NetworkDatabase
 from pprint import pprint
 import re
 import time
 import requests
+import threading
 
 logger = get_logger(__name__)
 
 class DiscoveryEngine:
     def __init__(self, scanners, sleep_interval=15):
         logger.info('Initializing discovery engine.')
-        
         self.oui_lookup = OUILookup()
         self.db = NetworkDatabase()
-        
         self.sleep_interval = sleep_interval
         self.network_to_output = {}
+        self.latest_poll_timestamp = None
         self.scanners = scanners
+        
+        self._lock = threading.Lock()
+        self.running = True
+        self.discovery_thread = threading.Thread(target=self.run)
+        self.discovery_thread.start()
     
     
     def send_scanner_request(self, scanner, value, request_arg=None):
@@ -81,27 +86,38 @@ class DiscoveryEngine:
     
     def create_records(self):
         for scanner in self.scanners:
+            with self._lock:
+                timestamp = get_current_utc_time()
+            self.latest_poll_timestamp = timestamp
             logger.info(f'Discovered these endpoints on network {scanner.network}:')
             for ip in self.network_to_output[scanner.network]:
                 mac = self.network_to_output[scanner.network][ip].get('mac')
                 vendor = self.network_to_output[scanner.network][ip].get('vendor')
                 gateway = self.network_to_output[scanner.network][ip].get('gateway')
                 logger.info(f'IP: {ip}, MAC: {mac}, Vendor: {vendor}, Gateway: {gateway}')
-                self.db.insert_record(ip, mac, vendor, gateway)
+                with self._lock:
+                    self.db.insert_record(ip, mac, vendor, gateway, timestamp)
                 
-    
     
     def run(self):
         logger.info('Starting discovery engine.')
-        while True:
+        while self.running:
             self.set_ips()
             self.set_mac_addresses()
             self.set_vendors()
             self.set_gateway()
             
             self.create_records()
-            logger.info('\n\nRecords from 2025-03-09 14:35:21')
-            logger.info(self.db.retrieve_record('2025-03-09 23:44:49'))
+            logger.info(self.db.retrieve_record(self.latest_poll_timestamp))
             
             self.network_to_output = {}
             time.sleep(self.sleep_interval)
+    
+    
+    def stop(self):
+        self.running = False
+        self.discovery_thread.join()
+        
+        
+    def get_latest_poll_time(self):
+        return self.latest_poll_timestamp

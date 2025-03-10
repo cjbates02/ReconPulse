@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging
 import subprocess
 
@@ -19,3 +20,7 @@ def get_logger(name, write_file=False):
             logger.addHandler(file_handler)
 
     return logger
+
+
+def get_current_utc_time():
+    return datetime.utcnow().isoformat() + "Z"
