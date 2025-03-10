@@ -1,8 +1,15 @@
 from discoverykit import DiscoveryEngine
 from models import Scanner
+from flask import Flask
+from views import NetworkExporterAPI
 import time
 
 """ WILL RUN ON CONTROLLER NODE """
+
+def create_api(discovery_engine):
+    api = Flask(__name__)
+    api.add_url_rule('/network_exporter', view_func=NetworkExporterAPI.as_view('network_exporter', discovery_engine=discovery_engine))
+    return api
 
 if __name__ == '__main__':
     # sudo $(which python) app.py
@@ -13,6 +20,5 @@ if __name__ == '__main__':
     scanner2 = Scanner(address='10.0.99.212:80', network='10.0.99.0/24')
     
     discovery_engine = DiscoveryEngine([scanner1, scanner2])
-    while True:
-        print(discovery_engine.get_latest_poll_time())
-        time.sleep(15)
+    api = create_api(discovery_engine)
+    api.run(debug=True, host='0.0.0.0')

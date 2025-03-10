@@ -85,10 +85,10 @@ class DiscoveryEngine:
                 
     
     def create_records(self):
-        for scanner in self.scanners:
-            with self._lock:
-                timestamp = get_current_utc_time()
+        with self._lock:
+            timestamp = get_current_utc_time()
             self.latest_poll_timestamp = timestamp
+        for scanner in self.scanners:
             logger.info(f'Discovered these endpoints on network {scanner.network}:')
             for ip in self.network_to_output[scanner.network]:
                 mac = self.network_to_output[scanner.network][ip].get('mac')
@@ -108,7 +108,6 @@ class DiscoveryEngine:
             self.set_gateway()
             
             self.create_records()
-            logger.info(self.db.retrieve_record(self.latest_poll_timestamp))
             
             self.network_to_output = {}
             time.sleep(self.sleep_interval)
