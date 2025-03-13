@@ -17,8 +17,9 @@ if __name__ == '__main__':
     # detection_engine = DetectionEngine('10.0.97.0/24')
     # detection_engine.run()
     scanner1 = Scanner(address='10.0.97.212:80', network='10.0.97.0/24')
-    scanner2 = Scanner(address='10.0.99.212:80', network='10.0.99.0/24')
+    scanner2 = Scanner(address='10.0.98.212:80', network='10.0.98.0/24')
+    scanner3 = Scanner(address='10.0.99.212:80', network='10.0.99.0/24')
     
-    discovery_engine = DiscoveryEngine([scanner1, scanner2])
+    discovery_engine = DiscoveryEngine([scanner1, scanner2, scanner3])
     api = create_api(discovery_engine)
     api.run(debug=True, host='0.0.0.0')
