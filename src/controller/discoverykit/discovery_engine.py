@@ -53,7 +53,7 @@ class DiscoveryEngine:
             ip_list = self.send_scanner_request(scanner, 'ip_list')
             if not ip_list:
                 ip_list = []
-            self.network_to_output[scanner.network] = {ip: {} for ip in ip_list}
+            self.network_to_output[scanner.network] = {ip: {'network': scanner.network} for ip in ip_list}
     
     
     def set_mac_addresses(self):
@@ -94,9 +94,10 @@ class DiscoveryEngine:
                 mac = self.network_to_output[scanner.network][ip].get('mac')
                 vendor = self.network_to_output[scanner.network][ip].get('vendor')
                 gateway = self.network_to_output[scanner.network][ip].get('gateway')
-                logger.info(f'IP: {ip}, MAC: {mac}, Vendor: {vendor}, Gateway: {gateway}')
+                network = self.network_to_output[scanner.network][ip].get('network')
+                logger.info(f'IP: {ip}, MAC: {mac}, Vendor: {vendor}, Gateway: {gateway}, Network: {network}')
                 with self._lock:
-                    self.db.insert_record(ip, mac, vendor, gateway, timestamp)
+                    self.db.insert_record(ip, mac, vendor, gateway, timestamp, network)
                 
     
     def run(self):

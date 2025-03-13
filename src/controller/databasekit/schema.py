@@ -28,16 +28,17 @@ class NetworkDatabase:
                 mac TEXT,
                 vendor TEXT,
                 gateway TEXT,
-                timestamp TEXT
+                timestamp TEXT,
+                network TEXT
             )
         ''')
         
     
-    def insert_record(self, ip, mac, vendor, gateway, timestamp):
+    def insert_record(self, ip, mac, vendor, gateway, timestamp, network):
         with self._lock:
             with self._connect_db() as connection:
                 cursor = connection.cursor()
-                cursor.execute(f'INSERT INTO {self.network_exporter_table} (ip, mac, vendor, gateway, timestamp) VALUES (? ,? ,? ,?, ?)', (ip, mac, vendor, gateway, timestamp,))
+                cursor.execute(f'INSERT INTO {self.network_exporter_table} (ip, mac, vendor, gateway, timestamp, network) VALUES (? ,? ,? ,?, ?, ?)', (ip, mac, vendor, gateway, timestamp, network,))
                 connection.commit()
         
     
