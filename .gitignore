@@ -5,3 +5,4 @@ venv
 src/app.log
 src/worker/.env
 src/controller/network.db
+src/web/node_modules
